@@ -37,6 +37,10 @@ fun MainNavigation(top: Dp) {
                 navController.navigate("registeredList")
             })
         }
-        composable("registeredList") { HomeScreen(modifier = Modifier.padding(12.dp, top)) }
+        composable("registeredList") {
+            HomeScreen(modifier = Modifier.padding(12.dp, top), onRegisteredAnotherOne = {
+                navController.navigate("main")
+            })
+        }
     }
 }
