@@ -132,4 +132,5 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
 }

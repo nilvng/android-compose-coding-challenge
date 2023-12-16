@@ -18,14 +18,24 @@ package com.example.brocoli.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.brocoli.ui.home.HomeScreen
 import com.example.brocoli.ui.registration.RegistrationScreen
+import com.example.brocoli.ui.registration.RegistrationUiState
+import com.example.brocoli.ui.registration.RegistrationViewModel
+import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun MainNavigation(top: Dp) {
@@ -33,9 +43,17 @@ fun MainNavigation(top: Dp) {
 
     NavHost(navController = navController, startDestination = "registeredList") {
         composable("main") {
-            RegistrationScreen(modifier = Modifier.padding(12.dp, top), onSubmitted = {
-                navController.navigate("registeredList")
-            })
+            val registrationViewModel = hiltViewModel<RegistrationViewModel>()
+            RegistrationScreen(
+                modifier = Modifier.padding(12.dp, top),
+                uiState = registrationViewModel.uiState.collectAsState(),
+                isLoadingState = registrationViewModel.isLoadingState,
+                onSubmitted = {
+                    navController.navigate("registeredList")
+                },
+                onSendingRequest = { name, email ->
+                    registrationViewModel.addRegistration(name, email)
+                })
         }
         composable("registeredList") {
             HomeScreen(modifier = Modifier.padding(12.dp, top), onRegisteredAnotherOne = {

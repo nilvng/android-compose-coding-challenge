@@ -38,7 +38,7 @@ class RegistrationScreenTest {
     @Before
     fun setup() {
         composeTestRule.setContent {
-            RegistrationScreen(FAKE_DATA, onSave = {})
+//            RegistrationScreen(FAKE_DATA, i})
         }
     }
 

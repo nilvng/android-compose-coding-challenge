@@ -16,12 +16,17 @@
 
 package com.example.brocoli.ui.registration
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.brocoli.data.RegistrationRepository
+import com.example.brocoli.data.remote.BroccoliApiService
+import com.example.brocoli.data.remote.RegistrationBody
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -32,13 +37,32 @@ class RegistrationViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState: StateFlow<RegistrationUiState> get() = _uiState.asStateFlow()
-    private val _uiState: MutableStateFlow<RegistrationUiState> = MutableStateFlow(RegistrationUiState.Default)
+    private val _uiState: MutableStateFlow<RegistrationUiState> =
+        MutableStateFlow(RegistrationUiState.Default)
+
+    val isLoadingState get() = _isLoadingState
+    private val _isLoadingState: MutableState<Boolean> = mutableStateOf(false)
 
     fun addRegistration(name: String, email: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoadingState.value = true
+            sendRequest(name, email)
+            _isLoadingState.value = false
+        }
+    }
+
+    private suspend fun sendRequest(name: String, email: String) {
+        val request = BroccoliApiService.myRetrofit.register(
+            RegistrationBody(
+                name = name,
+                email = email
+            )
+        ).execute()
+        if (request.isSuccessful) {
             registrationRepository.add(name, email)
-            // navigate to next screen
             _uiState.emit(RegistrationUiState.Done)
+        } else {
+            _uiState.emit(RegistrationUiState.Error(Throwable("Sorry, this email has been used")))
         }
     }
 }
