@@ -40,9 +40,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.brocoli.R
 
 @Composable
 fun RegistrationScreen(
@@ -65,7 +67,7 @@ fun RegistrationScreen(
 
             is RegistrationUiState.Default -> {
                 Text(
-                    text = "Please fill the form below",
+                    text = stringResource(id = R.string.register_form_title),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
@@ -77,7 +79,11 @@ fun RegistrationScreen(
 
             is RegistrationUiState.Error -> {
                 Text(
-                    text = "Error: ${(uiState.value as RegistrationUiState.Error).throwable.message!!}",
+                    text = stringResource(
+                        id = R.string.register_form_error_message,
+                        (uiState.value as RegistrationUiState.Error).throwable.message
+                            ?: stringResource(id = R.string.register_form_error_message_default)
+                    ),
                     color = Color.Black,
                     style = MaterialTheme.typography.titleLarge
                 )
@@ -103,19 +109,19 @@ internal fun RegistrationFormView(
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = nameRegistration,
-        placeholder = { Text("Name") },
+        placeholder = { Text(stringResource(id = R.string.register_form_name)) },
         onValueChange = { nameRegistration = it }
     )
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = email,
-        placeholder = { Text("Email") },
+        placeholder = { Text(stringResource(id = R.string.register_form_email)) },
         onValueChange = { email = it }
     )
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = confirmedEmail,
-        placeholder = { Text("Confirm Email") },
+        placeholder = { Text(stringResource(id = R.string.register_form_confirm_email)) },
         onValueChange = { confirmedEmail = it },
         isError = confirmedEmail != email,
     )
@@ -131,7 +137,7 @@ internal fun RegistrationFormView(
         Button(
             modifier = Modifier.width(96.dp),
             onClick = { onSave(nameRegistration, email) }) {
-            Text("Save")
+            Text(stringResource(id = R.string.register_form_save))
         }
     }
     Spacer(modifier = Modifier.size(12.dp))

@@ -15,5 +15,22 @@
   -->
 
 <resources>
-    <string name="app_name">MyApplication</string>
+    <string name="app_name">Registration Challenge</string>
+    <string name="register_form_title">Please fill the form below</string>
+    <string name="register_form_name">Name</string>
+    <string name="register_form_email">Email</string>
+    <string name="register_form_confirm_email">Confirm Email</string>
+    <string name="register_form_save">Save</string>
+
+    <string name="register_form_error_message">Error: %s</string>
+    <string name="register_form_error_message_default">Sorry, this email has been used.</string>
+    <string name="register_form_name_error">Name is required</string>
+    <string name="register_form_success_message">Congrats! You have successfully registered.</string>
+
+    <string name="home_button_register_more">Register another one</string>
+    <string name="home_button_delete_all">Delete all</string>
+    <string name="alert_delete_all_title">Are you sure you want to delete all registration?</string>
+    <string name="alert_delete_all_message">This action cannot be irreversible.</string>
+
+
 </resources>
