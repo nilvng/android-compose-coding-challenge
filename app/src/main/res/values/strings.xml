@@ -31,6 +31,8 @@
     <string name="home_button_delete_all">Delete all</string>
     <string name="alert_delete_all_title">Are you sure you want to delete all registration?</string>
     <string name="alert_delete_all_message">This action cannot be irreversible.</string>
+    <string name="alert_delete_yes">Yes</string>
+    <string name="alert_delete_no">No, my mistake</string>
 
 
 </resources>
