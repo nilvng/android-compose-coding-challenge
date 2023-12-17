@@ -17,6 +17,7 @@
 package com.example.brocoli.data.local.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.PrimaryKey
@@ -39,4 +40,6 @@ interface RegistrationDao {
 
     @Insert
     suspend fun insertRegistration(item: Registration)
+    @Query("DELETE FROM registration")
+    fun deleteAll()
 }

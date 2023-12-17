@@ -45,6 +45,10 @@ class FakeRegistrationRepository @Inject constructor() : RegistrationRepository 
     override suspend fun add(name: String, email: String) {
         throw NotImplementedError()
     }
+
+    override fun deleteAll() {
+        TODO("Not yet implemented")
+    }
 }
 
 val fakeRegistrations = listOf(

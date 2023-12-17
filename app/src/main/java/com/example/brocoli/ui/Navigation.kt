@@ -28,10 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.brocoli.ui.home.HomeScreen
+import com.example.brocoli.ui.home.HomeViewModel
 import com.example.brocoli.ui.registration.RegistrationScreen
 import com.example.brocoli.ui.registration.RegistrationUiState
 import com.example.brocoli.ui.registration.RegistrationViewModel
@@ -56,9 +58,14 @@ fun MainNavigation(top: Dp) {
                 })
         }
         composable("registeredList") {
-            HomeScreen(modifier = Modifier.padding(12.dp, top), onRegisteredAnotherOne = {
-                navController.navigate("main")
-            })
+            val homeViewModel = hiltViewModel<HomeViewModel>()
+            HomeScreen(modifier = Modifier.padding(12.dp, top),
+                uiState = homeViewModel.uiState.collectAsState(),
+                onRegisteredAnotherOne = {
+                    navController.navigate("main")
+                }, onCancelAllClicked = {
+                    homeViewModel.onCancelAllClicked()
+                })
         }
     }
 }

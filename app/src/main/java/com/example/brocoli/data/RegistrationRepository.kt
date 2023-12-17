@@ -26,6 +26,7 @@ interface RegistrationRepository {
     val registrations: Flow<List<Registration>>
 
     suspend fun add(name: String, email: String)
+    fun deleteAll()
 }
 
 class DefaultRegistrationRepository @Inject constructor(
@@ -37,5 +38,9 @@ class DefaultRegistrationRepository @Inject constructor(
 
     override suspend fun add(name: String, email: String) {
         registrationDao.insertRegistration(Registration(name = name, email = email))
+    }
+
+    override fun deleteAll() {
+        registrationDao.deleteAll()
     }
 }

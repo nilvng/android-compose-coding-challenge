@@ -9,36 +9,78 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.brocoli.data.local.database.Registration
 import com.example.brocoli.ui.theme.MyApplicationTheme
 
 @Composable
-fun HomeScreen(modifier: Modifier, onRegisteredAnotherOne: () -> Unit, viewModel: HomeViewModel = hiltViewModel()) {
-    val items by viewModel.uiState.collectAsStateWithLifecycle()
-    when (items) {
-        is HomeUiState.Success -> {
-            HomeScreen(
-                modifier = modifier,
-                registration = (items as HomeUiState.Success).data,
-                onRegisteredAnotherOne = onRegisteredAnotherOne
-            )
-        }
+fun HomeScreen(
+    modifier: Modifier,
+    uiState: State<HomeUiState>,
+    onRegisteredAnotherOne: () -> Unit,
+    onCancelAllClicked: () -> Unit,
+) {
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+    Box {
+        when (uiState.value) {
+            is HomeUiState.Success -> {
+                HomeScreen(
+                    modifier = modifier,
+                    registration = (uiState.value as HomeUiState.Success).data,
+                    onRegisteredAnotherOne = onRegisteredAnotherOne,
+                    onCancelAllClicked = { showDialog = true }
+                )
+            }
 
-        else -> {
-            Text(text = "Loading...")
+            else -> {
+                Text(text = "Loading...")
+            }
+        }
+        if (showDialog) {
+            AlertDialog(
+                properties = DialogProperties(),
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "Are you sure you want to cancel all of your registration?") },
+                text = { Text(text = "This action cannot be undone.") },
+                dismissButton = {
+                    Button(
+                        onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onBackground
+                        )
+                    ) {
+                        Text(text = "no, my mistake")
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = {
+                        showDialog = false
+                        onCancelAllClicked.invoke()
+                    }) {
+                        Text(text = "Yes")
+                    }
+                },
+            )
         }
     }
 }
@@ -46,7 +88,8 @@ fun HomeScreen(modifier: Modifier, onRegisteredAnotherOne: () -> Unit, viewModel
 @Composable
 internal fun HomeScreen(
     modifier: Modifier, registration: List<Registration>,
-    onRegisteredAnotherOne: () -> Unit = {}
+    onRegisteredAnotherOne: () -> Unit = {},
+    onCancelAllClicked: () -> Unit = {}
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(modifier) {
@@ -75,7 +118,7 @@ internal fun HomeScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = { /*TODO*/ }, colors = ButtonDefaults.textButtonColors(
+                onClick = onCancelAllClicked, colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.onBackground
                 )
             ) {
