@@ -14,7 +14,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -64,7 +66,7 @@ fun HomeScreen(
                 title = { Text(text = stringResource(id = R.string.alert_delete_all_title)) },
                 text = { Text(text = stringResource(id = R.string.alert_delete_all_message)) },
                 dismissButton = {
-                    Button(
+                    TextButton(
                         onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
                             contentColor = MaterialTheme.colorScheme.onBackground
                         )
@@ -122,17 +124,15 @@ internal fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
-                onClick = onCancelAllClicked, colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onBackground
-                )
+            OutlinedButton(
+                onClick = onCancelAllClicked,
             ) {
                 Text(text = stringResource(id = R.string.home_button_delete_all))
             }
 
             Button(
                 onClick = onRegisteredAnotherOne,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.buttonColors()
             ) {
                 Text(text = stringResource(id = R.string.home_button_register_more))
 
