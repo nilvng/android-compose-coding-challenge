@@ -67,7 +67,8 @@ fun HomeScreen(
                 text = { Text(text = stringResource(id = R.string.alert_delete_all_message)) },
                 dismissButton = {
                     TextButton(
-                        onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
+                        onClick = { showDialog = false },
+                        colors = ButtonDefaults.textButtonColors(
                             contentColor = MaterialTheme.colorScheme.onBackground
                         )
                     ) {

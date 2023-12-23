@@ -36,7 +36,7 @@ class DefaultRegistrationRepositoryTest {
     fun registrations_newItemSaved_itemIsReturned() = runTest {
         val repository = DefaultRegistrationRepository(FakeRegistrationDao())
 
-        repository.add("Repository")
+        repository.add("name", "email")
 
         assertEquals(repository.registrations.first().size, 1)
     }
@@ -53,5 +53,9 @@ private class FakeRegistrationDao : RegistrationDao {
 
     override suspend fun insertRegistration(item: Registration) {
         data.add(0, item)
+    }
+
+    override fun deleteAll() {
+        data.clear()
     }
 }
